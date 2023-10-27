@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+
+  notification-service:
+    container_name: notification-service
+    build: .
+    ports:
+      - "8686:8080"
+    volumes:
+      - ".:/api"
+
+  db:
+    # Database
+    image: postgres
+    restart: always
+    container_name: "database"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: friendify-dev
+    ports:
+      - 5555:5432
+    volumes:
+      - ../docker/postgres:/var/lib/postgresql
+
+  redis:
+    # Cache
+    image: redis
+    restart: always
+    container_name: "redis"
+    ports:
+      - 6868:6379
+
+  message-broker:
+    container_name: message-broker
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - 5672:5672
+      - 15672:15672
