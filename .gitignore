@@ -2,3 +2,4 @@ postgres
 bin
 tmp
 .idea
+.env
